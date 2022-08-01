@@ -1,0 +1,56 @@
+---
+title: "Data analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Prediction - Estimating the value/conditional distribution P(Y|X) of one variable given the values of others.
+
+Supervised learning - Solving a prediction problem when the data includes both X and Y, for example linear or logistic regression.
+
+Unsupervised learning - Solving a prediction problem when the data only includes X, for example clustering.
+
+Density estimation/generative modeling - Estimating the distribution P(Y) of some variables.
+
+```{r}
+n = 100
+X = rnorm(n)
+Y = X + rnorm(n)/10
+head(cbind(X, Y))
+```
+```{r}
+plot(X, Y, main = "Linear regression - continuous predictor")
+abline(lm(Y ~ X), col = 2)
+```
+```{r}
+Y = rbinom(n, 1, 1/(1 + exp(-X)))
+head(cbind(X, Y))
+```
+```{r}
+plot(X, Y, main = "Logistic regression - continuous predictor")
+points(X, fitted(glm(Y ~ X, binomial)), col = 2)
+```
+```{r}
+X = rbinom(n, 1, 0.5)
+Y = X + rnorm(n)/10
+head(cbind(X, Y))
+```
+```{r}
+rb = boxplot(Y ~ X, main = "Linear regression - discrete predictor")
+points(1:2, predict(lm(Y ~ X), newdata = data.frame(X = 0:1)), col = 2)
+```
+
+```{r}
+Y = rbinom(n, 1, ifelse(X, 1/4, 3/4))
+head(cbind(X, Y))
+```
+```{r}
+plot(table(X, Y), main = "Logistic regression - discrete predictor")
+plot(table(X, (fitted(glm(Y ~ X, binomial)) > 0.5) * 1), col = 2, main = "Logistic regression - discrete predictor")
+```
+
+
+
